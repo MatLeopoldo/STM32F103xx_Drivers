@@ -1,0 +1,14 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.elf
+
+# Linker output
+*.map
+
+# Debug files
+*.su
+
+
