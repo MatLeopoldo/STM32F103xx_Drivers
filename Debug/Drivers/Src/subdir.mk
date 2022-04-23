@@ -9,21 +9,24 @@ C_SRCS += \
 ../Drivers/Src/hal_i2c.c \
 ../Drivers/Src/hal_nvic.c \
 ../Drivers/Src/hal_rcc.c \
-../Drivers/Src/hal_spi.c 
+../Drivers/Src/hal_spi.c \
+../Drivers/Src/hal_usart.c 
 
 OBJS += \
 ./Drivers/Src/hal_gpio.o \
 ./Drivers/Src/hal_i2c.o \
 ./Drivers/Src/hal_nvic.o \
 ./Drivers/Src/hal_rcc.o \
-./Drivers/Src/hal_spi.o 
+./Drivers/Src/hal_spi.o \
+./Drivers/Src/hal_usart.o 
 
 C_DEPS += \
 ./Drivers/Src/hal_gpio.d \
 ./Drivers/Src/hal_i2c.d \
 ./Drivers/Src/hal_nvic.d \
 ./Drivers/Src/hal_rcc.d \
-./Drivers/Src/hal_spi.d 
+./Drivers/Src/hal_spi.d \
+./Drivers/Src/hal_usart.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -33,7 +36,7 @@ Drivers/Src/%.o: ../Drivers/Src/%.c Drivers/Src/subdir.mk
 clean: clean-Drivers-2f-Src
 
 clean-Drivers-2f-Src:
-	-$(RM) ./Drivers/Src/hal_gpio.d ./Drivers/Src/hal_gpio.o ./Drivers/Src/hal_i2c.d ./Drivers/Src/hal_i2c.o ./Drivers/Src/hal_nvic.d ./Drivers/Src/hal_nvic.o ./Drivers/Src/hal_rcc.d ./Drivers/Src/hal_rcc.o ./Drivers/Src/hal_spi.d ./Drivers/Src/hal_spi.o
+	-$(RM) ./Drivers/Src/hal_gpio.d ./Drivers/Src/hal_gpio.o ./Drivers/Src/hal_i2c.d ./Drivers/Src/hal_i2c.o ./Drivers/Src/hal_nvic.d ./Drivers/Src/hal_nvic.o ./Drivers/Src/hal_rcc.d ./Drivers/Src/hal_rcc.o ./Drivers/Src/hal_spi.d ./Drivers/Src/hal_spi.o ./Drivers/Src/hal_usart.d ./Drivers/Src/hal_usart.o
 
 .PHONY: clean-Drivers-2f-Src
 

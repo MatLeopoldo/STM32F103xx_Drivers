@@ -3,6 +3,7 @@
 "./Drivers/Src/hal_nvic.o"
 "./Drivers/Src/hal_rcc.o"
 "./Drivers/Src/hal_spi.o"
+"./Drivers/Src/hal_usart.o"
 "./Src/main.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"

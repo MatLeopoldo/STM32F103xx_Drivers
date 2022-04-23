@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  00020064  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00002343  00000000  00000000  0002008d  2**0
+ 12 .debug_info   00002362  00000000  00000000  0002008d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 0000074b  00000000  00000000  000223d0  2**0
+ 13 .debug_abbrev 00000769  00000000  00000000  000223ef  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000190  00000000  00000000  00022b20  2**3
+ 14 .debug_aranges 00000190  00000000  00000000  00022b58  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000148  00000000  00000000  00022cb0  2**3
+ 15 .debug_ranges 00000148  00000000  00000000  00022ce8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00002de4  00000000  00000000  00022df8  2**0
+ 16 .debug_macro  00002fa3  00000000  00000000  00022e30  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00001c5c  00000000  00000000  00025bdc  2**0
+ 17 .debug_line   00001c5c  00000000  00000000  00025dd3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0000af11  00000000  00000000  00027838  2**0
+ 18 .debug_str    0000b584  00000000  00000000  00027a2f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  00032749  2**0
+ 19 .comment      00000053  00000000  00000000  00032fb3  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000e84  00000000  00000000  0003279c  2**2
+ 20 .debug_frame  00000e84  00000000  00000000  00033008  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -702,10 +702,10 @@ void GPIO_Toggle(GPIO_RegDef_t *const pGPIOx, uint8_t Pin)
  80005d0:	08001a40 	.word	0x08001a40
 
 080005d4 <GPIO_ConfigInterrupt>:
-
-/********************************
- * Auxiliary Functions
- ********************************/
+ *
+ * Local Functions
+ *
+ ************************************/
 static void GPIO_ConfigInterrupt(GPIO_Handle_t *const pGPIOPin)
 {
  80005d4:	b580      	push	{r7, lr}

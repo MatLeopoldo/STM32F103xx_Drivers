@@ -1,4 +1,0 @@
-hal_rcc.c:16:10:RCC_GetSysClock	16	static
-hal_rcc.c:44:10:RCC_GetAHBClock	16	static
-hal_rcc.c:92:10:RCC_GetAPBClock	24	static
-hal_rcc.c:140:17:RCC_GetPLLClock	16	static
