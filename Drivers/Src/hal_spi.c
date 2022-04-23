@@ -9,6 +9,7 @@
 #include "utils_defs.h"
 
 /* Local Functions Prototypes */
+static uint8_t SPI_GetFlagStatus(SPI_RegDef_t *const pSPIx, uint8_t Flag);
 static void SPI_WriteITRHandler(SPI_Handle_t *const pSPIHandle);
 static void SPI_ReadITRHandler(SPI_Handle_t *const pSPIHandle);
 
@@ -162,7 +163,7 @@ void SPI_StopCommunication(SPI_RegDef_t *const pSPIx)
 	assert(IS_SPI_REG_VALID(pSPIx));
 
 	/* Wait until the peripheral is not busy. */
-	while(!BIT_TST(pSPIx->SR, SPI_SR_BSY));
+	while(!SPI_GetFlagStatus(pSPIx, SPI_SR_BSY));
 
 	/* Disable SPI Peripheral */
 	BIT_CLR(pSPIx->CR1, SPI_CR1_SPE);
@@ -178,7 +179,7 @@ void SPI_Write(SPI_Handle_t *const pSPIHandle, uint8_t *pData, uint16_t Size)
 	while(Size > 0)
 	{
 		/* Wait until TX Buffer to be empty */
-		while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_TXE));
+		while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_TXE));
 
 		if(BIT_TST(pSPIHandle->pSPIx->CR1, SPI_CR1_DFF))
 		{
@@ -213,7 +214,7 @@ void SPI_Read(SPI_Handle_t *const pSPIHandle, uint8_t *pData, uint16_t Size)
 		while(Size > 0)
 		{
 			/* Wait until RX Buffer to be filled */
-			while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_RXNE));
+			while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_RXNE));
 
 			if(BIT_TST(pSPIHandle->pSPIx->CR1, SPI_CR1_DFF))
 			{
@@ -246,13 +247,13 @@ void SPI_Transfer(SPI_Handle_t *const pSPIHandle, uint8_t *pTxData, uint8_t *pRx
 		{
 			/* 16-bits data */
 			/* Wait until TX Buffer to be empty */
-			while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_TXE));
+			while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_TXE));
 			/* Sending Data */
 			*pTxData = (uint16_t) pSPIHandle->pSPIx->DR;
 			pTxData += sizeof(uint16_t);
 
 			/* Wait until RX Buffer to be filled */
-			while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_RXNE));
+			while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_RXNE));
 			/* Receiving Data */
 			*pRxData = (uint8_t) pSPIHandle->pSPIx->DR;
 			pRxData += sizeof(uint16_t);
@@ -263,13 +264,13 @@ void SPI_Transfer(SPI_Handle_t *const pSPIHandle, uint8_t *pTxData, uint8_t *pRx
 		{
 			/* 8-bits data */
 			/* Wait until TX Buffer to be empty */
-			while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_TXE));
+			while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_TXE));
 			/* Sending Data */
 			*pTxData = (uint8_t) pSPIHandle->pSPIx->DR;
 			pTxData++;
 
 			/* Wait until RX Buffer to be filled */
-			while(!BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_RXNE));
+			while(!SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_RXNE));
 			/* Receiving Data */
 			*pRxData = (uint8_t) pSPIHandle->pSPIx->DR;
 			pRxData++;
@@ -293,7 +294,7 @@ uint8_t SPI_WriteITR(SPI_Handle_t *const pSPIHandle, uint8_t *pData, uint16_t Si
 	{
 		/* Initialize Tx context */
 		pSPIHandle->TxBuffer = pData;
-		pSPIHandle->TxDataSize = Size;
+		pSPIHandle->TxCounter = Size;
 		pSPIHandle->TxState = SPI_TX_COMM_BUSY;
 
 		/* Enable SPI Tx Interruption */
@@ -317,7 +318,7 @@ uint8_t SPI_ReadITR(SPI_Handle_t *const pSPIHandle, uint8_t *pData, uint16_t Siz
 	{
 		/* Initialize Rx context */
 		pSPIHandle->RxBuffer = pData;
-		pSPIHandle->RxDataSize = Size;
+		pSPIHandle->RxCounter = Size;
 		pSPIHandle->RxState = SPI_RX_COMM_BUSY;
 
 		/* Enable SPI Rx Interruption */
@@ -334,21 +335,21 @@ void SPI_ITRHandler(SPI_Handle_t *const pSPIHandle)
 
 	/* Check if TX was the interruption source */
 	if(BIT_TST(pSPIHandle->pSPIx->CR2, SPI_CR2_TXEIE) &&
-	   BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_TXE))
+	   SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_TXE))
 	{
 		SPI_WriteITRHandler(pSPIHandle);
 	}
 
 	/* Check if RX was the interruption source */
 	if(BIT_TST(pSPIHandle->pSPIx->CR2, SPI_CR2_RXNEIE) &&
-	   BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_RXNE))
+			SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_RXNE))
 	{
 		SPI_ReadITRHandler(pSPIHandle);
 	}
 
 	/* Check if an error was the interruption source */
 	if(BIT_TST(pSPIHandle->pSPIx->CR2, SPI_CR2_ERRIE) &&
-	   BIT_TST(pSPIHandle->pSPIx->SR, SPI_SR_OVR))
+			SPI_GetFlagStatus(pSPIHandle->pSPIx, SPI_SR_OVR))
 	{
 		/* TODO: Implement a function to handle this */
 	}
@@ -359,6 +360,11 @@ void SPI_ITRHandler(SPI_Handle_t *const pSPIHandle)
  * Local Functions
  *
  ************************************/
+static uint8_t SPI_GetFlagStatus(SPI_RegDef_t *const pSPIx, uint8_t Flag)
+{
+	return BIT_TST(pSPIx->SR, Flag);
+}
+
 static void SPI_WriteITRHandler(SPI_Handle_t *const pSPIHandle)
 {
 	/* Write 8-bits or 16-bits data */
@@ -367,7 +373,7 @@ static void SPI_WriteITRHandler(SPI_Handle_t *const pSPIHandle)
 		/* 16-bits data */
 		pSPIHandle->pSPIx->DR = *((uint16_t *)pSPIHandle->TxBuffer);
 		pSPIHandle->TxBuffer += sizeof(uint16_t);
-		pSPIHandle->TxDataSize -= sizeof(uint16_t);
+		pSPIHandle->TxCounter -= sizeof(uint16_t);
 	}
 	else
 	{
@@ -378,7 +384,7 @@ static void SPI_WriteITRHandler(SPI_Handle_t *const pSPIHandle)
 	}
 
 	/* Check if communication was concluded */
-	if(pSPIHandle->TxDataSize == 0)
+	if(pSPIHandle->TxCounter == 0)
 	{
 		pSPIHandle->TxBuffer = NULL;
 		pSPIHandle->TxState = SPI_COMM_READY;
@@ -397,7 +403,7 @@ static void SPI_ReadITRHandler(SPI_Handle_t *const pSPIHandle)
 		/* 16-bits data */
 		*((uint16_t *)pSPIHandle->RxBuffer) = pSPIHandle->pSPIx->DR;
 		pSPIHandle->RxBuffer += sizeof(uint16_t);
-		pSPIHandle->RxDataSize -= sizeof(uint16_t);
+		pSPIHandle->RxCounter -= sizeof(uint16_t);
 	}
 	else
 	{
@@ -408,7 +414,7 @@ static void SPI_ReadITRHandler(SPI_Handle_t *const pSPIHandle)
 	}
 
 	/* Check if communication was concluded */
-	if(pSPIHandle->RxDataSize == 0)
+	if(pSPIHandle->RxCounter == 0)
 	{
 		pSPIHandle->RxBuffer = NULL;
 		pSPIHandle->RxState = SPI_COMM_READY;

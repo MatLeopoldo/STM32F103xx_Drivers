@@ -98,10 +98,10 @@ typedef struct
 	SPI_RegDef_t *pSPIx;
 	SPI_DevConfig_t Config;
 	uint8_t *TxBuffer;
-	uint8_t TxDataSize;
+	uint8_t TxCounter;
 	uint8_t TxState;
 	uint8_t *RxBuffer;
-	uint8_t RxDataSize;
+	uint8_t RxCounter;
 	uint8_t RxState;
 } SPI_Handle_t;
 

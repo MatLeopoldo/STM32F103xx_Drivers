@@ -297,9 +297,12 @@ void GPIO_IRQHandling(uint8_t PinNumber)
 	BIT_SET(EXTI->PR, PinNumber);
 }
 
-/********************************
- * Auxiliary Functions
- ********************************/
+
+/************************************
+ *
+ * Local Functions
+ *
+ ************************************/
 static void GPIO_ConfigInterrupt(GPIO_Handle_t *const pGPIOPin)
 {
 	uint8_t ConfValue;

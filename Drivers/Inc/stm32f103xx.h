@@ -51,6 +51,10 @@
 
 #define SPI2_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00003800U)
 #define SPI3_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00003C00U)
+#define USART2_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00004400U)
+#define USART3_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00004800U)
+#define UART4_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00004C00U)
+#define UART5_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00005000U)
 #define I2C1_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00005400U)
 #define I2C2_BASE_ADDRESS		(APB1_BASE_ADDRESS + 0x00005800U)
 
@@ -70,6 +74,7 @@
 #define GPIOF_BASE_ADDRESS		(APB2_BASE_ADDRESS + 0x00001C00U)
 #define GPIOG_BASE_ADDRESS		(APB2_BASE_ADDRESS + 0x00002000U)
 #define SPI1_BASE_ADDRESS		(APB2_BASE_ADDRESS + 0x00003000U)
+#define USART1_BASE_ADDRESS		(APB2_BASE_ADDRESS + 0x00003800U)
 
 
 /**************************
@@ -79,12 +84,20 @@
 /* RCC_APB1RSTR */
 #define RCC_APB1RSTR_SPI2_RST	(14U)
 #define RCC_APB1RSTR_SPI3_RST	(15U)
+#define RCC_APB1RSTR_USART2_RST (17U)
+#define RCC_APB1RSTR_USART3_RST (18U)
+#define RCC_APB1RSTR_UART4_RST 	(19U)
+#define RCC_APB1RSTR_UART5_RST 	(20U)
 #define RCC_APB1RSTR_I2C1_RST	(21U)
 #define RCC_APB1RSTR_I2C2_RST	(22U)
 
 /* RCC_APB1ENR */
 #define RCC_APB1ENR_SPI2_EN		(14U)
 #define RCC_APB1ENR_SPI3_EN		(15U)
+#define RCC_APB1ENR_USART2_EN 	(17U)
+#define RCC_APB1ENR_USART3_EN 	(18U)
+#define RCC_APB1ENR_UART4_EN 	(19U)
+#define RCC_APB1ENR_UART5_EN 	(20U)
 #define RCC_APB1ENR_I2C1_EN		(21U)
 #define RCC_APB1ENR_I2C2_EN		(22U)
 
@@ -98,6 +111,7 @@
 #define RCC_APB2RSTR_IOPF_RST	(7U)
 #define RCC_APB2RSTR_IOPG_RST	(8U)
 #define RCC_APB2RSTR_SPI1_RST	(12U)
+#define RCC_APB2RSTR_USART1_RST (14U)
 
 /* RCC_APB2ENR */
 #define RCC_APB2ENR_AFIO_EN		(0U)
@@ -109,6 +123,7 @@
 #define RCC_APB2ENR_IOPF_EN		(7U)
 #define RCC_APB2ENR_IOPG_EN		(8U)
 #define RCC_APB2ENR_SPI1_EN		(12U)
+#define RCC_APB2ENR_USART1_EN 	(14U)
 
 /* SPI_CR1 */
 #define SPI_CR1_CPHA			(0U)
@@ -217,6 +232,58 @@
 #define RCC_CFGR_USB_PRE		(22U)
 #define RCC_CFGR_MCO			(24U)
 
+/* USART_SR */
+#define USART_SR_PE				(0U)
+#define USART_SR_FE				(1U)
+#define USART_SR_NE				(2U)
+#define USART_SR_ORE			(3U)
+#define USART_SR_IDLE			(4U)
+#define USART_SR_RXNE			(5U)
+#define USART_SR_TC				(6U)
+#define USART_SR_TXE			(7U)
+#define USART_SR_LBD			(8U)
+#define USART_SR_CTS			(9U)
+
+/* USART_CR1 */
+#define USART_CR1_SBK			(0U)
+#define USART_CR1_RWU			(1U)
+#define USART_CR1_RE			(2U)
+#define USART_CR1_TE			(3U)
+#define USART_CR1_IDLEIE		(4U)
+#define USART_CR1_RXNEIE		(5U)
+#define USART_CR1_TCIE			(6U)
+#define USART_CR1_TXEIE			(7U)
+#define USART_CR1_PEIE			(8U)
+#define USART_CR1_PS			(9U)
+#define USART_CR1_PCE			(10U)
+#define USART_CR1_WAKE			(11U)
+#define USART_CR1_M				(12U)
+#define USART_CR1_UE			(13U)
+
+/* USART_CR2 */
+#define USART_CR2_ADD			(0U)
+#define USART_CR2_LBDL			(5U)
+#define USART_CR2_LBDIE			(6U)
+#define USART_CR2_LBLC			(8U)
+#define USART_CR2_CPHA			(9U)
+#define USART_CR2_CPOL			(10U)
+#define USART_CR2_CLKEN			(11U)
+#define USART_CR2_STOP			(12U)
+#define USART_CR2_LINEN			(14U)
+
+/* USART_CR1 */
+#define USART_CR3_EIE			(0U)
+#define USART_CR3_IREN			(1U)
+#define USART_CR3_IRLP			(2U)
+#define USART_CR3_HDSEL			(3U)
+#define USART_CR3_NACK			(4U)
+#define USART_CR3_SCEN			(5U)
+#define USART_CR3_DMAR			(6U)
+#define USART_CR3_DMAT			(7U)
+#define USART_CR3_RTSE			(8U)
+#define USART_CR3_CTSE			(9U)
+#define USART_CR3_CTSIE			(10U)
+
 /**************************
  *  Registers Structures
  **************************/
@@ -297,6 +364,18 @@ typedef struct
 	volatile uint32_t TRISE;
 } I2C_RegDef_t;
 
+/* Universal Synchronous Asynchronous Receiver Transmitter (USART) */
+typedef struct
+{
+	volatile uint32_t SR;
+	volatile uint32_t DR;
+	volatile uint32_t BRR;
+	volatile uint32_t CR1;
+	volatile uint32_t CR2;
+	volatile uint32_t CR3;
+	volatile uint32_t GTPR;
+} USART_RegDef_t;
+
 /**************************
  *  Registers Defs
  **************************/
@@ -319,5 +398,11 @@ typedef struct
 
 #define I2C1					((I2C_RegDef_t *) I2C1_BASE_ADDRESS)
 #define I2C2					((I2C_RegDef_t *) I2C2_BASE_ADDRESS)
+
+#define USART1					((USART_RegDef_t *) USART1_BASE_ADDRESS)
+#define USART2					((USART_RegDef_t *) USART2_BASE_ADDRESS)
+#define USART3					((USART_RegDef_t *) USART3_BASE_ADDRESS)
+#define UART4					((USART_RegDef_t *) UART4_BASE_ADDRESS)
+#define UART5					((USART_RegDef_t *) UART5_BASE_ADDRESS)
 
 #endif /* INC_STM32F103XX_H_ */
